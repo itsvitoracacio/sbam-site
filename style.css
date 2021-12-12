@@ -1,0 +1,858 @@
+/* ===============================
+    Starting with a clean slate
+================================== */
+
+/* Resetting all elements */
+* {
+  box-sizing: border-box;
+}
+
+/* ===================
+    Setting variables
+====================== */
+
+:root {
+  /* main elements colors */
+  --bg-color: hsl(44, 31%, 93%, 1);
+  --primary-color: hsl(347, 100%, 44%, 1);
+  --link-color: hsl(347, 100%, 44%, 0.65);
+  --headings-color: hsl(0, 3%, 14%, 1);
+  --body-color: hsl(0, 3%, 14%, 0.85);
+
+  /* specific elements colors */
+  --sticky-copyright-color: hsl(0, 3%, 14%, 0.75);
+  --decor-lines-color: hsl(0, 3%, 14%, 0.5);
+  --deactivated-color: hsl(0, 3%, 14%, 0.3);
+  --footer-bg-color: hsl(0, 3%, 14%, 1);
+  --footer-body-color: hsl(0, 0%, 100%, 0.85);
+  --bottom-copyright-color: hsl(0, 0%, 100%, 0.75);
+
+  /* fonts */
+  --h1-font: minion-pro-display, serif;
+  --headings-font: minion-pro-subhead, serif;
+  --headings-font-weight: 400;
+  --body-font: "Inter", sans-serif;
+  --body-weight: 300;
+  --copyright-weight: 200;
+
+  /* responsiveness */
+  --site-max-width: 1240px;
+  --perfect-section-size: calc(100vh - 9rem);
+  --body-size: 1rem;
+
+  /* grid stuff */
+  --main-sections-margin: 1.5rem;
+  --grid-gap: 20px;
+  --column-count: 12;
+  --column-size: calc(
+    (
+        100vw - 2 * var(--main-sections-margin) - (var(--column-count) - 1) *
+          var(--grid-gap)
+      ) / var(--column-count)
+  );
+  --column-and-gap: calc(var(--column-size) + var(--grid-gap));
+}
+
+/* ============================
+    Styling generic elements
+=============================== */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-color);
+  color: var(--body-color);
+  font-family: var(--body-font);
+  font-weight: var(--body-weight);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: var(--headings-font-weight);
+}
+
+h1 {
+  font-family: var(--h1-font);
+  font-size: clamp(2.5rem, 8vw, 3.5rem);
+  line-height: 105%;
+  letter-spacing: -0.02rem;
+}
+
+h1,
+h2 {
+  color: var(--headings-color);
+}
+
+h2,
+h3 {
+  font-family: var(--headings-font);
+}
+
+h2 {
+  font-size: clamp(2rem, 3.75vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.02rem;
+}
+
+h3 {
+  text-decoration: underline;
+  text-underline-offset: 1px;
+  font-size: clamp(1.25rem, 1.875vw, 1.5rem);
+  line-height: 1.25;
+  letter-spacing: -0.015rem;
+  margin-bottom: 2.5rem;
+  color: var(--body-color);
+}
+
+p,
+li{
+  font-size: 1rem;
+  line-height: 1.4;
+  letter-spacing: -0.02rem;
+}
+
+p {
+  margin: 1.4rem 0;
+}
+
+a {
+  color: var(--link-color);
+  text-decoration: underline;
+  text-decoration-color: var(--link-color);
+}
+
+a:hover {
+  color: var(--primary-color);
+  text-decoration: underline;
+  text-decoration-color: var(--primary-color);
+}
+
+svg {
+  display: block;
+}
+
+/* utility classes used across the website */
+span.underline {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+span.italic {
+  font-style: italic;
+}
+
+a.deactivated-link {
+  color: var(--deactivated-color);
+  position: relative;
+}
+
+a.deactivated-link:hover {
+  text-decoration: none;
+  cursor: default;
+}
+
+a.soon::after {
+  content: "(soon)";
+  position: absolute;
+  display: block;
+  font-size: 0.75rem;
+  right: 0;
+}
+
+a.cta-button {
+  color: var(--body-color);
+  text-decoration: none;
+  font-family: var(--headings-font);
+  font-style: italic;
+  font-size: 1.125rem;
+  line-height: 1.25rem;
+  border: 2px solid var(--primary-color);
+  padding: 0.75rem 4.375rem 0.75rem 0.75rem;
+  position: relative;
+  display: block;
+  /* max-width: calc(4.5 * var(--column-and-gap) + var(--column-size));
+  float: right; */
+}
+
+a.cta-button::after {
+  content: "";
+  box-sizing: border-box;
+  height: 1rem;
+  width: 0.75rem;
+  border-style: solid;
+  border-width: 0.5rem 0 0.5rem 0.75rem;
+  border-color: transparent transparent transparent var(--primary-color);
+  position: absolute;
+  right: 0.75rem;
+  transform: translateY(-0.5rem);
+}
+
+/* these rules determines the width
+of the website and goes into all
+sections of the page */
+header,
+main,
+footer section.sticky-copyright {
+  max-width: var(--site-max-width);
+}
+
+/* =====================
+    Styling the header
+======================== */
+
+header,
+aside.mobile-menu,
+footer section.sticky-copyright {
+  background-color: var(--bg-color);
+  position: fixed;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  z-index: 1;
+}
+
+header {
+  top: 0;
+  width: 100%;
+  padding: 1rem calc(0.66 * var(--main-sections-margin));
+  justify-content: space-between;
+}
+
+nav.big-screen-nav {
+  display: none;
+}
+
+nav a {
+  color: var(--sticky-copyright-color);
+  text-decoration: none;
+  font-weight: 200;
+}
+
+/* This is the mobile menu that
+enters from outside of the viewport */
+input.nav-trigger {
+  display: none;
+}
+
+input.nav-trigger:checked ~ aside.mobile-menu {
+  transform: translateX(0);
+  opacity: 0.98;
+}
+
+aside.mobile-menu {
+  height: var(--perfect-section-size);
+  top: 4.5rem;
+  left: 0;
+  opacity: 0.5;
+  transform: translateX(100%);
+  transition: all 0.4s ease-out;
+  flex-direction: column;
+  justify-content: center;
+}
+
+rect.line-1,
+rect.line-2 {
+  color: var(--headings-color);
+  transition: all 0.35s;
+  opacity: 0.75;
+}
+
+input.nav-trigger:checked ~ * rect.line-1 {
+  transform: translateX(0.75em) translateY(-0.075em) rotate(45deg);
+}
+
+input.nav-trigger:checked ~ * rect.line-2 {
+  transform: translateX(-0.6em) translateY(1em) rotate(-45deg);
+}
+
+/* =====================
+    Styling the footer
+======================== */
+
+footer section.sticky-copyright {
+  bottom: 0;
+  padding: 0.5rem calc(0.66 * var(--main-sections-margin));
+  justify-content: space-between;
+  font-size: 0.75rem;
+  font-weight: var(--copyright-weight);
+  color: var(--sticky-copyright-color);
+}
+
+div.footer-bottom {
+  background-color: var(--footer-bg-color);
+  z-index: 2;
+  padding: ;
+
+}
+
+section.bottom-copyright {
+  color: var(--bottom-copyright-color);
+}
+
+div.footer-bottom h2,
+div.footer-bottom p,
+div.footer-bottom span,
+div.footer-bottom li {
+  font-size: 0.75rem;
+  color: var(--footer-body-color);
+}
+
+div.footer-bottom h2 {
+  font-family: var(--body-font);
+  font-weight: 600;
+}
+
+div.footer-bottom p,
+div.footer-bottom span,
+div.footer-bottom li {
+  font-weight: var(--copyright-weight);
+}
+
+div.footer-capabilities ul {
+  padding-left: 0;
+  list-style: none;
+  margin-top: 1.4rem;
+}
+
+/* =====================================
+    Styling the main part of the page
+======================================== */
+
+/* Main content, concerning all sections */
+
+/*..... website side margins AND offset to
+account for the header .....*/
+main {
+  margin: 0 calc(0.66 * var(--main-sections-margin));
+  padding: 4rem 0;
+}
+
+/*..... white space between sections AND between sections children, which are only their headline and a div with their main content .....*/
+main section {
+  margin-bottom: 8rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 2rem;
+}
+
+/*..... setting the vertical mobile layout for
+section blocks that will be side-by-side on
+wide layouts .....*/
+div.pricing-content-wrapper,
+.flex-column-to-row {
+  display: flex;
+  flex-direction: column;
+}
+
+/*..... adjusting vertical space
+between elements for hierarchy .....*/
+div.offer-item-block p,
+.mobile-spacing-top-zero {
+  margin-top: 0;
+}
+
+/*..... adjusting vertical space
+between elements for hierarchy .....*/
+div.faq-block h3,
+div.offer-item-block h3,
+.mobile-spacing-bottom-sized {
+  margin-bottom: 2rem;
+}
+
+/*..... adjusting vertical space
+between elements for hierarchy .....*/
+section#positioning > div,
+section#offer-items > div,
+section#other-services > div,
+section#faq > div {
+  row-gap: 0.5rem;
+}
+
+/* Above the fold: styling all inner
+elements */
+
+section.offer-atf {
+  row-gap: 0rem;
+  position: relative;
+}
+
+p.offer-atf-body {
+  font-family: var(--headings-font);
+  font-size: 1.25rem;
+  letter-spacing: 0.01rem;
+  line-height: 120%;
+  margin: 1rem 0;
+}
+
+p.offer-atf-body:last-of-type {
+  margin-top: 0.5rem;
+}
+
+a.offer-atf-cta {
+  font-family: var(--headings-font);
+  font-size: 1.125rem;
+  color: var(--headings-color);
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+  row-gap: 0.35rem;
+}
+
+a.offer-atf-cta span {
+  text-align: right;
+  line-height: 1.125rem;
+}
+
+section.offer-atf::before {
+  content: url(/assets/scroll-arrow.svg);
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: -1;
+  margin: auto;
+}
+
+/* Key benefits: styling the boxes
+and their inner elements */
+
+div.key-benefits-wrapper {
+  row-gap: var(--grid-gap);
+}
+
+div.key-benefit-box {
+  border: 1px var(--primary-color) solid;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  row-gap: 1.5rem;
+  overflow: hidden;
+}
+
+div.key-benefit-box span {
+  position: relative;
+  font-size: 1.1rem;
+  height: 1rem;
+  top: 0;
+}
+
+div.key-benefit-box span::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  background-color: var(--primary-color);
+  width: 0.9rem;
+  height: 0.9rem;
+}
+
+div.key-benefit-box h3 {
+  margin: 0;
+}
+
+div.key-benefit-box p {
+  margin: 1.5rem 0 0;
+}
+
+/*..... interaction to show each box
+detailed content on hover .....*/
+/* div.key-benefit-inner {
+  transform: translateY(83.25%);
+} */
+
+/* =====================================
+    Responsiveness
+======================================== */
+
+/*..... adjusts the page margin to
+this size of screen .....*/
+@media screen and (min-width: 361px) {
+  header {
+    padding: var(--main-sections-margin);
+  }
+
+  main {
+    margin: 0 var(--main-sections-margin);
+    padding: 4rem 0;
+  }
+
+  footer section.sticky-copyright {
+    padding: 1rem var(--main-sections-margin);
+  }
+}
+
+/*..... puts blocks side-by-side, which is
+the main aspect of the
+big screen layout .....*/
+
+@media screen and (min-width: 597px) {
+  /* All sections */
+
+  /*..... white space below each section heading .....*/
+  main section {
+    row-gap: clamp(2rem, 8vw, 5rem);
+  }
+
+  /*..... puts the section blocks side-by-side .....*/
+  .flex-column-to-row {
+    flex-direction: row;
+    column-gap: var(--column-and-gap);
+  }
+
+  /*..... makes the sections with more than two blocks have multiple lines .....*/
+  div.multiple-blocks-wrapper {
+    flex-wrap: wrap;
+    row-gap: 4rem;
+  }
+
+  /*..... defines the width of blocks
+  that take 4 columns on the figma
+  desktop layout and of the blocks
+  that take 3 columns but behave like
+ 4 at this screen size .....*/
+  div.block-wide,
+  div.block-child-wide > * {
+    flex-basis: calc(4.5 * var(--column-and-gap) + var(--column-size));
+  }
+
+  div.cta-section-wrapper > div {
+    flex-basis: calc(5.1 * var(--column-and-gap) + var(--column-size));
+  }
+
+  /*..... defines the width of blocks that take 3 columns on the figma desktop layout .....*/
+  div.key-benefit-box {
+    flex-basis: calc(3 * var(--column-and-gap) + var(--column-size));
+  }
+
+  div.pricing-block > p {
+    max-width: calc(3.25 * var(--column-and-gap) + var(--column-size));
+  }
+
+  div.cta-section-wrapper > div {
+    flex-basis: calc(5.16 * var(--column-and-gap) + var(--column-size));
+  }
+
+  a.cta-button {
+    float: none;
+    max-width: calc(3.75 * var(--column-and-gap) + var(--column-size));
+  }
+
+  /*..... defines the gap between
+  blocks that are only one column gap
+  appart on the figma desktop layout
+  .....*/
+  div.offer-item-block,
+  div.key-benefits-wrapper,
+  div.pricing-block-wrapper,
+  div.pricing-footer,
+  div.cta-section-wrapper {
+    justify-content: initial;
+    column-gap: var(--grid-gap);
+  }
+
+  /*..... optical alignment on the page main heading .....*/
+  h1.offer-headline {
+    margin-left: -2px;
+  }
+
+  /*..... headings alignment .....*/
+  h2.left-side {
+    align-self: flex-start;
+  }
+
+  h2.right-side {
+    align-self: flex-end;
+    text-align: right;
+  }
+
+  /*..... setting headings width so
+  they behave similarly as the screen
+ size grows .....*/
+  h2.grid-columns-3 {
+    max-width: calc(3.91 * var(--column-and-gap) + var(--column-size));
+  }
+
+  h2.grid-columns-5 {
+    max-width: calc(6.21 * var(--column-and-gap) + var(--column-size));
+  }
+
+  h2.grid-columns-6 {
+    max-width: calc(6.84 * var(--column-and-gap) + var(--column-size));
+  }
+
+  /* Above the fold */
+
+  /*..... distancing the page main heading from the header .....*/
+  section.offer-atf {
+    padding-top: 2rem;
+  }
+
+  /*..... resetting the paragraphs' margin to their original value .....*/
+  p.offer-atf-body {
+    margin: 0.83em 0;
+  }
+
+  /*..... vertically aligning the right block so both paragraphs' main chunk of text start together .....*/
+  p.offer-atf-body:last-of-type {
+    margin-top: 1rem;
+    padding-top: 2.4em;
+  }
+
+  /* Offer items */
+
+  /*..... vertical alignment between blocks elements that are side-by-side .....*/
+  div.offer-item-block h3 {
+    margin-top: 0;
+  }
+
+  /*..... vertical optical alignment between blocks elements that are side-by-side .....*/
+  div.offer-item-block p {
+    margin-top: 0.125rem;
+  }
+
+  /* Pricing section */
+
+  /*..... aligns the cta button on the pricing section to the bottom of the left block
+    .....*/
+  p.desktop-spacing-bottom-zero {
+    margin-bottom: 0;
+  }
+
+  div.pricing-footer,
+  div.cta-section-wrapper {
+    align-items: flex-end;
+  }
+
+  div.pricing-footer-block p,
+  div.cta-section-wrapper p {
+    margin: 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--decor-lines-color);
+  }
+}
+
+/*..... adjust headings width for
+this screen size .....*/
+@media screen and (min-width: 660px) {
+  h2.grid-columns-3 {
+    max-width: calc(3.41 * var(--column-and-gap) + var(--column-size));
+  }
+
+  h2.grid-columns-6 {
+    max-width: calc(6.13 * var(--column-and-gap) + var(--column-size));
+  }
+
+  a.cta-button {
+    max-width: calc(3.25 * var(--column-and-gap) + var(--column-size));
+  }
+}
+
+/*..... adjust headings width for
+this screen size .....*/
+@media screen and (min-width: 729px) {
+  h2.grid-columns-3 {
+    max-width: calc(3 * var(--column-and-gap) + var(--column-size));
+  }
+
+  h2.grid-columns-6 {
+    max-width: calc(6.05 * var(--column-and-gap) + var(--column-size));
+  }
+}
+
+/* Brings in the full header navbar
+and the atf decoration elements */
+@media screen and (min-width: 768px) {
+  /*..... removes the hamburger menu, inserts the full navbar and styles it .....*/
+  label.mobile-menu-toggle {
+    display: none;
+  }
+
+  nav.big-screen-nav {
+    display: block;
+    flex-basis: 31.55%;
+    letter-spacing: -0.02rem;
+    color: var(--sticky-copyright-color);
+  }
+
+  nav.big-screen-nav ul {
+    list-style-type: none;
+    text-transform: lowercase;
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    margin: 0;
+  }
+
+  /*.....  .....*/
+  div.block-wide,
+  div.block-child-wide > *,
+  div.pricing-block,
+  div.pricing-footer > * {
+    flex-basis: calc(4.25 * var(--column-and-gap) + var(--column-size));
+  }
+
+  div.cta-section-wrapper > div {
+    flex-basis: calc(4.925 * var(--column-and-gap) + var(--column-size));
+  }
+
+  a.cta-button {
+    max-width: calc(2.625 * var(--column-and-gap) + var(--column-size));
+  }
+
+  /*..... adjust headings width for
+this screen size .....*/
+  h1.offer-headline {
+    max-width: calc(10 * var(--column-and-gap) + var(--column-size));
+  }
+
+  h2.grid-columns-3 {
+    max-width: calc(2.78 * var(--column-and-gap) + var(--column-size));
+  }
+
+  h2.grid-columns-6 {
+    max-width: calc(5.664 * var(--column-and-gap) + var(--column-size));
+  }
+}
+
+/*..... adjust headings width for
+this screen size .....*/
+@media screen and (min-width: 810px) {
+  h2.grid-columns-6 {
+    max-width: calc(5.417 * var(--column-and-gap) + var(--column-size));
+  }
+}
+
+/*..... adjust headings width for
+this screen size .....*/
+@media screen and (min-width: 840px) {
+  h1.offer-headline {
+    max-width: calc(8.24 * var(--column-and-gap) + var(--column-size));
+  }
+
+  h2.grid-columns-3 {
+    max-width: calc(2.434 * var(--column-and-gap) + var(--column-size));
+  }
+
+  h2.grid-columns-6 {
+    max-width: calc(5.289 * var(--column-and-gap) + var(--column-size));
+  }
+}
+
+/* Introduces the grid margins,
+concluding the big-screen-layout */
+@media screen and (min-width: 881px) {
+  main section {
+    margin: 0 var(--column-and-gap) 8rem;
+  }
+
+  div.right-side-on-desktop {
+    justify-content: flex-end;
+  }
+
+  div.offer-item-block {
+    justify-content: center;
+  }
+
+  /* div.grid-left-margin {
+    margin-left: var(--column-and-gap);
+  } */
+
+  div.block-wide,
+  div.block-child-wide > * {
+    flex-basis: calc(3.25 * var(--column-and-gap) + var(--column-size));
+  }
+
+  div.cta-section-wrapper > div {
+    flex-basis: calc(4.75 * var(--column-and-gap) + var(--column-size));
+  }
+
+  div.key-benefit-box {
+    flex-basis: calc(2.1875 * var(--column-and-gap) + var(--column-size));
+  }
+
+  div.pricing-block > p,
+  a.cta-button {
+    max-width: calc(2.1875 * var(--column-and-gap) + var(--column-size));
+  }
+
+  /*..... introduces the scroll down arrow on the above the fold section .....*/
+  section#cta-section {
+    position: relative;
+  }
+
+  /*..... introduces a decorative vertical
+line on the above the fold section .....*/
+  section.offer-atf::after {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 25.5rem;
+    right: calc(-1 * var(--column-and-gap));
+    bottom: 0;
+    z-index: -1;
+    background-color: var(--decor-lines-color);
+  }
+
+  section#cta-section::after {
+    content: "";
+    position: absolute;
+    width: 1px;
+    height: 16.5rem;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+    background-color: var(--decor-lines-color);
+  }
+
+  /* section.offer-atf::after {
+    right: calc(
+      var(--main-sections-margin) + var(--column-size) + var(--grid-gap)
+    );
+  } */
+
+  /*..... adjust headings width for
+this screen size .....*/
+  h1.offer-headline {
+    max-width: calc(7.786 * var(--column-and-gap) + var(--column-size));
+  }
+
+  h2.grid-columns-3 {
+    max-width: calc(2.5 * var(--column-and-gap) + var(--column-size));
+  }
+
+  h2.grid-columns-5 {
+    max-width: calc(4 * var(--column-and-gap) + var(--column-size));
+  }
+
+  h2.grid-columns-6 {
+    max-width: calc(5 * var(--column-and-gap) + var(--column-size));
+  }
+}
+
+/*..... adjust headings width for
+this screen size .....*/
+@media screen and (min-width: 1045px) {
+  h1.offer-headline {
+    max-width: calc(6.344 * var(--column-and-gap) + var(--column-size));
+  }
+
+  div.key-benefit-box {
+    flex-basis: calc(2.085 * var(--column-and-gap) + var(--column-size));
+  }
+
+  /* div.cta-section-wrapper > div {
+    flex-basis: calc(4.95 * var(--column-and-gap) + var(--column-size));
+  } */
+
+  a.cta-button {
+    max-width: calc(1.58 * var(--column-and-gap) + var(--column-size));
+  }
+}
